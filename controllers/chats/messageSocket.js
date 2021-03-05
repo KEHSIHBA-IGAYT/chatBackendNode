@@ -4,22 +4,14 @@ const recordMessage = require("./recordMessage.js");
 module.exports = async io => {
     try {
 
-        console.log("socket");
-
         io.on("connection", socket => {
 
-            console.log("connected");
             socket.emit('connection', 'Connected to backend socket!!!');
 
             //Send status
             const sendStatus = (res) => {
                 socket.emit('status', res)
             }
-
-            //on connection
-            socket.on("register-connection", userId => {
-                console.log(`User-connection registered: ${userId}`);
-            });
 
             socket.on(
                 "new-message",
@@ -41,7 +33,7 @@ module.exports = async io => {
                         sendStatus("Message could not be saved");
                     }
                     else {
-                        socket.emit("message-added", { userId, userName, message, createdAt });
+                        io.emit("message-added", { userId, userName, message, createdAt });
                     }
                 }
             );
